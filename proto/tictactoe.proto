@@ -1,0 +1,71 @@
+syntax = "proto3";
+
+package tictactoe.v1;
+
+enum RequestEvent {
+  REQUEST_EVENT_JOIN = 0;
+  REQUEST_EVENT_MOVE = 1;
+  REQUEST_EVENT_REMATCH = 2;
+  REQUEST_EVENT_CLOSE = 3;
+  REQUEST_EVENT_RESTART = 4;
+}
+
+enum ResponseEvent {
+  RESPONSE_EVENT_START = 0;
+  RESPONSE_EVENT_MOVE = 1;
+  RESPONSE_EVENT_END = 2;
+  RESPONSE_EVENT_REMATCH_ACCEPTED = 3;
+  RESPONSE_EVENT_ROOM_CREATED = 4;
+  RESPONSE_EVENT_ROOM_CLOSED = 5;
+  RESPONSE_EVENT_ERROR = 6;
+}
+
+enum GameMode {
+  MODE_SINGLE_PLAYER = 0;
+  MODE_DOUBLE_PLAYER = 1;
+}
+
+enum Result {
+  RESULT_VICTORY = 0;
+  RESULT_DEFEAT = 1;
+  RESULT_DRAW = 2;
+}
+
+message Header {
+  string Token = 1;
+}
+
+message RequestBody {
+  int32 move = 1;
+  GameMode game_mode = 2;
+}
+
+enum Turn {
+  PLAYER_ONE = 0;
+  PLAYER_TWO = 1;
+}
+
+message ResponseBody {
+  oneof resp {
+    int32 move = 1;
+    Turn turn = 2;
+  }
+  Result result = 3;
+}
+
+message Request {
+  RequestEvent event = 1;
+  Header header = 2;
+  RequestBody body = 3;
+}
+
+message Response {
+  ResponseEvent event = 1;
+  Header header = 2;
+  ResponseBody body = 3;
+  string error_message = 4;
+}
+
+service TicTacToe {
+  rpc Connect (stream Request) returns (stream Response);
+}
