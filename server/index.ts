@@ -1,3 +1,4 @@
+/* eslint-disable no-case-declarations */
 import * as grpc from '@grpc/grpc-js'
 import { ITicTacToeServer, TicTacToeService } from '../proto/tictactoe_grpc_pb'
 import { Header, Request, RequestEvent, Response, ResponseEvent } from '../proto/tictactoe_pb'
