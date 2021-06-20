@@ -1,13 +1,14 @@
 /* eslint-disable no-case-declarations */
 import * as grpc from '@grpc/grpc-js'
-import { ITicTacToeServer, TicTacToeService } from '../proto/tictactoe_grpc_pb'
-import { Header, Request, RequestEvent, Response, ResponseEvent } from '../proto/tictactoe_pb'
+import { ITicTacToeServer, TicTacToeService } from 'tictactoe-common/proto/tictactoe_grpc_pb'
+import { Header, Request, RequestEvent, Response, ResponseEvent } from 'tictactoe-common/proto/tictactoe_pb'
 import logger from './logger'
 import { Room, subscribe } from './logic/room'
 
 class GameServer implements ITicTacToeServer {
   connect (call: grpc.ServerDuplexStream<Request, Response>):void {
     let room: Room
+    let token: string | undefined
 
     const responseHandler = (res: Response) => {
       call.write(res)
@@ -20,46 +21,58 @@ class GameServer implements ITicTacToeServer {
       }
     }
 
+    const joinRequestEventHandler = (req: Request, token: string): void => {
+      const mode = req.getBody()?.getGameMode()
+      if (mode !== undefined) {
+        // TODO: define the callback function
+        // Actually... YOLO
+
+        room = subscribe(mode, responseHandler)
+      }
+    }
+
+    const moveRequestEventHandler = (req: Request, token: string): void => {
+      const move = req.getBody()?.getMove()
+
+      if (move === undefined) {
+        responseHandler(
+          new Response()
+            .setEvent(ResponseEvent.RESPONSE_EVENT_ERROR)
+            .setHeader(new Header().setToken(token))
+            .setErrorMessage('Expected a valid move, received undefined')
+        )
+        return
+      }
+
+      room.move(token as string, move)
+    }
+
     call.on('data', (req: Request): void => {
       const event = req.getEvent()
-      const token = req.getHeader()?.getToken()
+      token = req.getHeader()?.getToken() || token
+
+      if (!token) {
+        call.write(
+          new Response()
+            .setEvent(ResponseEvent.RESPONSE_EVENT_ERROR)
+            .setErrorMessage('token not received')
+        )
+        call.end()
+        return
+      }
 
       switch (event) {
         case RequestEvent.REQUEST_EVENT_JOIN:
-          const mode = req.getBody()?.getGameMode()
-          if (mode !== undefined) {
-            // TODO: define the callback function
-            // Actually... YOLO
-
-            room = subscribe(mode, responseHandler)
-          }
+          joinRequestEventHandler(req, token)
           return
 
         case RequestEvent.REQUEST_EVENT_MOVE:
-          const move = req.getBody()?.getMove()
-
-          if (move === undefined) {
-            responseHandler(
-              new Response()
-                .setEvent(ResponseEvent.RESPONSE_EVENT_ERROR)
-                .setHeader(new Header().setToken(token as string))
-                .setErrorMessage('Expected a valid move, received undefined')
-            )
-            return
-          }
-
-          room.move(token as string, move)
+          moveRequestEventHandler(req, token)
           return
 
         case RequestEvent.REQUEST_EVENT_CLOSE:
           room.dissolve()
-
-          responseHandler(
-            new Response()
-              .setEvent(ResponseEvent.RESPONSE_EVENT_ERROR)
-              .setHeader(new Header().setToken(token as string))
-              .setErrorMessage('Expected a valid move, received undefined')
-          )
+          call.end()
           return
 
         case RequestEvent.REQUEST_EVENT_REMATCH:

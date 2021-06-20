@@ -1,10 +1,12 @@
-import { Mode, Player, winConditions } from '../types/const'
-import { Grid as GridType } from '../types/types'
 import { minimax } from './logic'
+import { Mode, Player, winConditions } from './types/const'
+import { Grid as GridType, GridValue } from './types/types'
 
 export default class Grid {
   private grid: GridType
   private moves: number = 0
+
+  public map: <U>(callbackfn: (value: GridValue, index: number, array: GridValue[]) => U, thisArg?: any) => U[];
 
   constructor () {
     this.grid = [
@@ -14,6 +16,18 @@ export default class Grid {
     ]
 
     this.moves = 0
+
+    // alias this.map with this.grid.map
+    // This will give the developers read-only access to the grid
+    this.map = this.grid.map.bind(this.grid)
+  }
+
+  public valueOf (index: number): GridValue {
+    if (index > 8 || index < 0) {
+      throw new RangeError('Expected a value between 0 and 8, received ' + index)
+    }
+
+    return this.grid[index]
   }
 
   public move (player: Player, place: number) {

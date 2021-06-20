@@ -5,7 +5,7 @@
 /* eslint-disable */
 
 import * as grpc from "grpc";
-import * as proto_tictactoe_pb from "../proto/tictactoe_pb";
+import * as proto_tictactoe_pb from "./tictactoe_pb";
 
 interface ITicTacToeService extends grpc.ServiceDefinition<grpc.UntypedServiceImplementation> {
     connect: ITicTacToeService_IConnect;

@@ -1,6 +1,5 @@
-import * as logger from '../logger'
-import { Level, Mode, Player, winConditions } from '../types/const'
-import { Grid } from '../types/types'
+import { Level, Mode, Player, winConditions } from './types/const'
+import { Grid } from './types/types'
 
 export const findWinCondition = (grid: Grid, player: Player) => {
   const winWays = winConditions.length
@@ -9,7 +8,7 @@ export const findWinCondition = (grid: Grid, player: Player) => {
     for (let j = 0; j < 3; j++) {
       if (grid[winCondition[j]] === player) {
         if (j === 2) {
-          logger.debug('findWinCondition', `win condition ${winCondition}`)
+          console.debug('findWinCondition', `win condition ${winCondition}`)
           return true
         }
         continue
@@ -130,7 +129,7 @@ export const findNextMove = (grid: Grid, player: Player, level: Level): number =
     if (!grid[i]) {
       grid[i] = player
       const score = minimax(grid, player, 0, Mode.MAX)
-      // logger.debug("I:", i, ", Score:", score)
+      // console.debug("I:", i, ", Score:", score)
       if (score > bestScore) {
         bestScore = score
         bestMove = i

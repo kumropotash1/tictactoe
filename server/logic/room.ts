@@ -1,9 +1,9 @@
 import EventEmitter from 'events'
+import Grid from 'tictactoe-common/grid'
+import { GameMode, Header, Response, ResponseBody, ResponseEvent, Result, Turn } from 'tictactoe-common/proto/tictactoe_pb'
+import { Player } from 'tictactoe-common/types'
 import * as uuid from 'uuid'
-import { GameMode, Header, Response, ResponseBody, ResponseEvent, Result, Turn } from '../../proto/tictactoe_pb'
 import * as logger from '../logger'
-import { Player } from '../types'
-import Grid from './grid'
 
 export class Room {
   public players: string[] = []
