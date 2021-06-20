@@ -2,6 +2,7 @@ import { FC } from 'react'
 import { GameMode } from 'tictactoe-common/proto/tictactoe_pb'
 import Button from './Button'
 import { useGameState } from './state'
+import "./style.css"
 
 const Grid: FC<GridProps> = ({mode}) => {
   const { grid, isMyTurn, onPlayerMove } = useGameState(mode)
@@ -11,7 +12,7 @@ const Grid: FC<GridProps> = ({mode}) => {
     return
   }
 
-  console.log("GRID:", grid)
+  console.log("isMyTurn:", isMyTurn)
 
   return (
     <div className="container">

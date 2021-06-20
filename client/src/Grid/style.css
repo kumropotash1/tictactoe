@@ -1,6 +1,9 @@
 .container {
-  grid-template-areas: repeat(3, 100px) / repeat(3, 100px);
-  gap: 10px;
-  background-color: #dddddd;
-  border: 10px solid #dddddd;
+  display: inline-grid;
+  grid-template: repeat(3, 100px) / repeat(3, 100px);
+  gap: 3px;
+  margin: 20px;
+  border: 16px solid #f0f0f0;
+  background-color: #666;
 }
+

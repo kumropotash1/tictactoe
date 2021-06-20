@@ -6,7 +6,7 @@ const buttonSymbol =  [' ', 'X', 'O']
 
 const Button: FC<ButtonProps> = ({value, disabled, onclick}) => {
   console.log(value)
-  return <button className="btn" disabled={false} onClick={onclick}>{buttonSymbol[value]}</button>
+  return <button className="btn" disabled={disabled || value > 0} onClick={onclick}>{buttonSymbol[value]}</button>
 }
 
 interface ButtonProps {
