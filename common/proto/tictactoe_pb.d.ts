@@ -1,5 +1,5 @@
 // package: tictactoe.v1
-// file: proto/tictactoe.proto
+// file: tictactoe.proto
 
 /* tslint:disable */
 /* eslint-disable */
@@ -176,8 +176,8 @@ export enum ResponseEvent {
 }
 
 export enum GameMode {
-    MODE_SINGLE_PLAYER = 1,
-    MODE_DOUBLE_PLAYER = 2,
+    MODE_SINGLE_PLAYER = 0,
+    MODE_DOUBLE_PLAYER = 1,
 }
 
 export enum Result {

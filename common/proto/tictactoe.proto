@@ -66,6 +66,6 @@ message Response {
   string error_message = 4;
 }
 
-service TicTacToe {
-  rpc Connect (stream Request) returns (stream Response);
-}
+// service TicTacToe {
+//   rpc Connect (stream Request) returns (stream Response);
+// }

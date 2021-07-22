@@ -1,7 +1,9 @@
-import { Level, Mode, Player, winConditions } from './types/const'
-import { Grid } from './types/types'
+import { Level, Mode, winConditions } from './types/const'
+import { Grid, Turn } from './types/types'
 
-export const findWinCondition = (grid: Grid, player: Player) => {
+export const findWinCondition = (grid: Grid, turn: Turn) => {
+  const player = turn === 'first' ? 1 : 2
+
   const winWays = winConditions.length
   for (let i = 0; i < winWays; i++) {
     const winCondition = winConditions[i]
@@ -18,7 +20,9 @@ export const findWinCondition = (grid: Grid, player: Player) => {
   }
 }
 
-const isWinning = (grid: Grid, player: Player): boolean => {
+const isWinning = (grid: Grid, turn: Turn): boolean => {
+  const player = turn === 'first' ? 1 : 2
+
   for (const condition of winConditions) {
     let isWinning = true
     for (const index of condition) {
@@ -35,8 +39,10 @@ const isWinning = (grid: Grid, player: Player): boolean => {
   return false
 }
 
-export const minimax = (grid: Grid, player: Player, depth: number, mode: Mode): number => {
-  if (isWinning(grid, player)) {
+export const minimax = (grid: Grid, turn: Turn, depth: number, mode: Mode): number => {
+  const player = turn === 'first' ? 1 : 2
+  
+  if (isWinning(grid, turn)) {
     return mode * (10 - depth)
   }
 
@@ -47,12 +53,14 @@ export const minimax = (grid: Grid, player: Player, depth: number, mode: Mode): 
 
   const opponent = player === 1 ? 2 : 1
 
+  const opponentTurn: Turn = turn === 'first' ? 'second' : 'first'
+
   if (mode === Mode.MAX) {
     let bestScore = Infinity
     for (let i = 0; i < 9; i++) {
       if (!grid[i]) {
         grid[i] = opponent
-        bestScore = Math.min(minimax(grid, opponent, depth, Mode.MIN), bestScore)
+        bestScore = Math.min(minimax(grid, opponentTurn, depth, Mode.MIN), bestScore)
         grid[i] = 0
       }
     }
@@ -62,7 +70,7 @@ export const minimax = (grid: Grid, player: Player, depth: number, mode: Mode): 
     for (let i = 0; i < 9; i++) {
       if (!grid[i]) {
         grid[i] = opponent
-        bestScore = Math.max(minimax(grid, opponent, depth + 1, Mode.MAX), bestScore)
+        bestScore = Math.max(minimax(grid, opponentTurn, depth + 1, Mode.MAX), bestScore)
         grid[i] = 0
       }
     }
@@ -71,7 +79,7 @@ export const minimax = (grid: Grid, player: Player, depth: number, mode: Mode): 
   }
 }
 
-export const findNextMove = (grid: Grid, player: Player, level: Level): number => {
+export const findNextMove = (grid: Grid, turn: Turn, level: Level): number => {
   // 3 levels:
   // 0 -> Doesn't try to defend, doesn't try to win. a noob. Returns a random value
   // 1 -> Actively defends by blocking the opponent. Checks how a defeat can be avoided
@@ -123,12 +131,14 @@ export const findNextMove = (grid: Grid, player: Player, level: Level): number =
   //   default: throw new Error('Unexpected value for level')
   // }
 
+  const player = turn === 'first' ? 1 : 2
+
   let bestScore = -Infinity
   let bestMove = 0
   for (let i = 0; i < 9; i++) {
     if (!grid[i]) {
       grid[i] = player
-      const score = minimax(grid, player, 0, Mode.MAX)
+      const score = minimax(grid, turn, 0, Mode.MAX)
       // console.debug("I:", i, ", Score:", score)
       if (score > bestScore) {
         bestScore = score

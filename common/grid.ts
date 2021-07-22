@@ -1,6 +1,6 @@
 import { minimax } from './logic'
-import { Mode, Player, winConditions } from './types/const'
-import { Grid as GridType, GridValue } from './types/types'
+import { Mode, winConditions } from './types/const'
+import { Grid as GridType, GridValue, Turn } from './types/types'
 
 export default class Grid {
   private grid: GridType
@@ -30,23 +30,23 @@ export default class Grid {
     return this.grid[index]
   }
 
-  public move (player: Player, place: number) {
+  public move (player: Turn, place: number) {
     if (this.grid[place]) {
       throw new Error('Trying to access a non-empty place')
     }
 
-    this.grid[place] = player
+    this.grid[place] = player === 'first' ? 1 : 2
     this.moves++
 
     this.repaint()
   }
 
-  public suggestMove (player: Player) {
+  public suggestMove (player: Turn) {
     let bestScore = -Infinity
     let bestMove = 0
     for (let i = 0; i < 9; i++) {
       if (!this.grid[i]) {
-        this.grid[i] = player
+        this.grid[i] = player === 'first' ? 1 : 2
         const score = minimax(this.grid, player, 0, Mode.MAX)
         // logger.debug("I:", i, ", Score:", score)
         if (score > bestScore) {
@@ -65,7 +65,9 @@ export default class Grid {
     return this.moves === 9 // && !this.isVictory(Player.FIRST) && !this.isVictory(Player.SECOND) // TODO here
   }
 
-  public isVictory (player: Player): boolean {
+  public isVictory (turn: Turn): boolean {
+    const player = turn === 'first' ? 1 : 2
+    
     for (const condition of winConditions) {
       let isWinning = true
       for (const index of condition) {

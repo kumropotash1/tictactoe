@@ -1,4 +1,4 @@
-// source: proto/tictactoe.proto
+// source: tictactoe.proto
 /**
  * @fileoverview
  * @enhanceable

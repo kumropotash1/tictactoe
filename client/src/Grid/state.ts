@@ -1,6 +1,7 @@
 import { useState } from "react";
-import { GameMode, Result } from "../../../common/proto/tictactoe_pb";
 import { Player } from "../../../common/types/const";
+import { TicTacToeClient } from "../../grpc-client/tictactoe_grpc_web_pb";
+import { GameMode, Result } from "../../grpc-client/tictactoe_pb";
 
 interface reducerPayload {
   // type: string
@@ -31,7 +32,9 @@ export const useGameState = (mode: GameMode) => {
   const [isMyTurn, setIsMyTurn] = useState<boolean>(true)
   const [turn, setTurn] = useState<Player>(Player.FIRST)
   const [grid, setGrid] = useState<Grid>(initialGrid)
-  
+
+  let conn = new TicTacToeClient('localhost:8081')
+
   console.log(grid)
   // TODOS:
   // 1. Create connection

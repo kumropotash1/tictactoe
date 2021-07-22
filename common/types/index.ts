@@ -1,6 +1,66 @@
-import { Level, Mode, Player } from './const'
-import { Grid, GridValue } from './types'
+import {
+  Level,
+  Mode,
+
+  REQUEST_EVENT_CLOSE,
+  REQUEST_EVENT_JOIN,
+  REQUEST_EVENT_MOVE,
+  REQUEST_EVENT_REMATCH,
+  REQUEST_EVENT_RESTART,
+  RESPONSE_EVENT_END,
+  RESPONSE_EVENT_ERROR,
+  RESPONSE_EVENT_MOVE,
+  RESPONSE_EVENT_REMATCH_ACCEPTED,
+  RESPONSE_EVENT_ROOM_CLOSED,
+  RESPONSE_EVENT_ROOM_CREATED,
+  RESPONSE_EVENT_START,
+
+  RESULT_DEFEAT,
+  RESULT_DRAW,
+  RESULT_VICTORY
+} from './const'
+import {
+  GameMode,
+  Grid,
+  GridValue,
+  Request,
+  RequestEvent,
+  Response,
+  ResponseEvent,
+  Result,
+  Turn
+} from './types'
+
 
 export {
-  Level, Mode, Player, Grid, GridValue
+  Level,
+  Mode,
+  Turn,
+  GameMode,
+
+  RESULT_VICTORY,
+  RESULT_DRAW,
+  RESULT_DEFEAT,
+
+  REQUEST_EVENT_JOIN,
+  REQUEST_EVENT_MOVE,
+  REQUEST_EVENT_REMATCH,
+  REQUEST_EVENT_CLOSE,
+  REQUEST_EVENT_RESTART,
+  RESPONSE_EVENT_START,
+  RESPONSE_EVENT_MOVE,
+  RESPONSE_EVENT_END,
+  RESPONSE_EVENT_REMATCH_ACCEPTED,
+  RESPONSE_EVENT_ROOM_CREATED,
+  RESPONSE_EVENT_ROOM_CLOSED,
+  RESPONSE_EVENT_ERROR,
+
+  Grid,
+  GridValue,
+  Request,
+  Response,
+  RequestEvent,
+  ResponseEvent,
+  Result
 }
+
